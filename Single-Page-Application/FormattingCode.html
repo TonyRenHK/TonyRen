@@ -31,9 +31,16 @@
                 theme: 'default',
                 lineNumbers: true
             });
+		
             the.editor.focus();
 		
-	 var clipboard = new Clipboard('#copybtn');
+	
+		 var clipboard = new Clipboard('#copybtn', {
+        target: function() {
+            return the.editor.getValue();
+        }
+    });
+		
 		clipboard.on('success', function(e) {
 		console.log(e);
 		});
@@ -81,7 +88,7 @@
     <br/>
 
     <input type="button" onclick="Beautify()"  value="Formatting " class="btn btn-default" />
-<button class="btn btn-default" id="copybtn"  data-clipboard-target="#code">
+<button class="btn btn-default" id="copybtn" >
     Cut to clipboard
 </button>
 	
