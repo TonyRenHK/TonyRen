@@ -16,7 +16,9 @@
     <script type="text/javascript" src="http://codemirror.net/addon/runmode/runmode.js"></script>
     <script type="text/javascript" src="http://codemirror.net/mode/javascript/javascript.js"></script>
 	 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	 
+	 <script src="http://cdn.rawgit.com/zenorocha/clipboard.js/v1.5.10/dist/clipboard.min.js"></script>
+	
+	
     <script type="text/javascript">
         var the = {
             use_codemirror: (!window.location.href.match(/without-codemirror/)),
@@ -30,7 +32,14 @@
                 lineNumbers: true
             });
             the.editor.focus();
-
+		
+	 var clipboard = new Clipboard('#copybtn');
+		clipboard.on('success', function(e) {
+		console.log(e);
+		});
+		clipboard.on('error', function(e) {
+		console.log(e);
+		});
         });
 
         function looks_like_html(source) {
@@ -72,7 +81,11 @@
     <br/>
 
     <input type="button" onclick="Beautify()"  value="Formatting " class="btn btn-default" />
-
+<button class="btn btn-default" id="copybtn"  data-clipboard-target="#code">
+    Cut to clipboard
+</button>
+	
+	
 </body>
 
 </html>
