@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+    <title>Code Beautifier</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://codemirror.net/lib/codemirror.css" type="text/css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="http://jsbeautifier.org/js/lib/beautify.js"></script>
+
+    <script src="https://cdn.rawgit.com/beautify-web/js-beautify/master/js/lib/beautify-css.js"></script>
+    <script src="https://cdn.rawgit.com/beautify-web/js-beautify/master/js/lib/beautify-html.js"></script>
+    <script type="text/javascript" src="http://codemirror.net/lib/codemirror.js"></script>
+    <script type="text/javascript" src="http://codemirror.net/addon/runmode/runmode.js"></script>
+    <script type="text/javascript" src="http://codemirror.net/mode/javascript/javascript.js"></script>
+	 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	 
+    <script type="text/javascript">
+        var the = {
+            use_codemirror: (!window.location.href.match(/without-codemirror/)),
+            editor: null
+        };
+
+        $(document).ready(function() {
+            var textArea = $('#code')[0];
+            the.editor = CodeMirror.fromTextArea(textArea, {
+                theme: 'default',
+                lineNumbers: true
+            });
+            the.editor.focus();
+
+        });
+
+        function looks_like_html(source) {
+            // <foo> - looks like html
+            // <!--\nalert('foo!');\n--> - doesn't look like html
+
+            var trimmed = source.replace(/^[ \t\n\r]+/, '');
+            var comment_mark = '<' + '!-' + '-';
+            return (trimmed && (trimmed.substring(0, 1) === '<' && trimmed.substring(0, 4) !== comment_mark));
+        }
+
+
+        function Beautify() {
+            //$('#code').val(), ()document.getElementById("code").value,
+            var source = the.editor ? the.editor.getValue() : $('#code').val(),
+                output,
+                opts = {};
+
+            if (looks_like_html(source)) {
+                output = html_beautify(source, opts);
+            } else {
+                output = js_beautify(source, opts);
+            }
+
+            if (the.editor) {
+                the.editor.setValue(output);
+            } else {
+                $('#source').val(output);
+            }
+        }
+    </script>
+</head>
+
+<body>
+
+
+    <textarea id="code" rows="30" cols="160" class="form-control" >
+	</textarea>
+    <br/>
+
+    <input type="button" onclick="Beautify()"  value="Formatting " class="btn btn-default" />
+
+</body>
+
+</html>
