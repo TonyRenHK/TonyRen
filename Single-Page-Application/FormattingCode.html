@@ -17,7 +17,6 @@
     <script type="text/javascript" src="https://codemirror.net/addon/runmode/runmode.js"></script>
     <script type="text/javascript" src="https://codemirror.net/mode/javascript/javascript.js"></script>
 	 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	 <script src="https://cdn.rawgit.com/zenorocha/clipboard.js/v1.5.10/dist/clipboard.min.js"></script>
 	
 	
     <script type="text/javascript">
@@ -36,18 +35,6 @@
             the.editor.focus();
 		
 	
-		 var clipboard = new Clipboard('#copybtn', {
-        target: function() {
-            return the.editor.getValue();
-        }
-    });
-		
-		clipboard.on('success', function(e) {
-		console.log(e);
-		});
-		clipboard.on('error', function(e) {
-		console.log(e);
-		});
         });
 
         function looks_like_html(source) {
@@ -78,6 +65,26 @@
                 $('#source').val(output);
             }
         }
+	    
+	 function CopycClipboard(){
+	  // Create an auxiliary hidden input
+  var aux = document.createElement("input");
+
+  // Get the text from the element passed into the input
+  aux.setAttribute("value",the.editor.getValue());
+
+  // Append the aux input to the body
+  document.body.appendChild(aux);
+
+  // Highlight the content
+  aux.select();
+
+  // Execute the copy command
+  document.execCommand("copy");
+
+  // Remove the input from the body
+  document.body.removeChild(aux);
+	 }
     </script>
 </head>
 
@@ -89,7 +96,7 @@
     <br/>
 
     <input type="button" onclick="Beautify()"  value="Formatting " class="btn btn-default" />
-<button class="btn btn-default" id="copybtn" >
+<button class="btn btn-default" onclick="CopycClipboard();">
     Cut to clipboard
 </button>
 	
