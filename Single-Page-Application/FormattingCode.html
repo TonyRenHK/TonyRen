@@ -6,6 +6,54 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/abcdef.css">
+
+    <link rel="stylesheet" href="https://codemirror.net/lib/codemirror.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/3024-day.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/3024-night.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/abcdef.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/ambiance.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/blackboard.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/cobalt.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/colorforth.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/dracula.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/duotone-dark.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/duotone-light.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/eclipse.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/elegant.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/erlang-dark.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/hopscotch.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/icecoder.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/isotope.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/lesser-dark.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/liquibyte.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/material.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/mbo.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/mdn-like.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/midnight.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/monokai.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/neat.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/neo.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/night.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/panda-syntax.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/paraiso-dark.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/paraiso-light.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/pastel-on-dark.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/railscasts.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/rubyblue.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/seti.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/solarized.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/the-matrix.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/tomorrow-night-bright.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/tomorrow-night-eighties.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/ttcn.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/twilight.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/vibrant-ink.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/xq-dark.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/xq-light.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/yeti.css">
+    <link rel="stylesheet" href="https://codemirror.net/theme/zenburn.css">
+
     <link rel="stylesheet" href="https://codemirror.net/lib/codemirror.css" type="text/css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.rawgit.com/TonyRenHK/TonyRen/master/lib/beautify.js"></script>
@@ -40,7 +88,7 @@
 
             var clipboard = new Clipboard("#Copybtn", {
                 text: function(trigger) {
-					document.getElementById("result").style.visibility = 'visible';
+                    document.getElementById("result").style.visibility = 'visible';
                     return null;
                 }
             });
@@ -109,22 +157,97 @@
                 $(btn).tooltip('hide');
             }, 2000);
         }
+
+        function selectTheme() {
+            var e = document.getElementById("selectThemeId");
+            var theme = e.options[e.selectedIndex].value;
+            console.log(theme);
+            //var theme = input.options[input.selectedIndex].textContent;
+            the.editor.setOption("theme", theme);
+        }
     </script>
 </head>
 
 <body>
+    <div class="row">
+
+        <textarea id="code" rows="30" cols="160" class="form-control"></textarea>
+
+    </div>
+	
+    <div class="row">
+        <div class="col-xs-1">
+            Select a theme:
+        </div>
+        <div class="col-xs-1">
+		<select onchange="selectTheme()" id='selectThemeId' class="form-control">
+			<option selected>default</option>
+			<option>3024-day</option>
+			<option>3024-night</option>
+			<option>abcdef</option>
+			<option>ambiance</option>
+			<option>base16-dark</option>
+			<option>base16-light</option>
+			<option>bespin</option>
+			<option>blackboard</option>
+			<option>cobalt</option>
+			<option>colorforth</option>
+			<option>dracula</option>
+			<option>duotone-dark</option>
+			<option>duotone-light</option>
+			<option>eclipse</option>
+			<option>elegant</option>
+			<option>erlang-dark</option>
+			<option>hopscotch</option>
+			<option>icecoder</option>
+			<option>isotope</option>
+			<option>lesser-dark</option>
+			<option>liquibyte</option>
+			<option>material</option>
+			<option>mbo</option>
+			<option>mdn-like</option>
+			<option>midnight</option>
+			<option>monokai</option>
+			<option>neat</option>
+			<option>neo</option>
+			<option>night</option>
+			<option>panda-syntax</option>
+			<option>paraiso-dark</option>
+			<option>paraiso-light</option>
+			<option>pastel-on-dark</option>
+			<option>railscasts</option>
+			<option>rubyblue</option>
+			<option>seti</option>
+			<option>solarized dark</option>
+			<option>solarized light</option>
+			<option>the-matrix</option>
+			<option>tomorrow-night-bright</option>
+			<option>tomorrow-night-eighties</option>
+			<option>ttcn</option>
+			<option>twilight</option>
+			<option>vibrant-ink</option>
+			<option>xq-dark</option>
+			<option>xq-light</option>
+			<option>yeti</option>
+			<option>zenburn</option>
+		</select>
+        </div>
+ <div class="col-xs-1">
 
 
-    <textarea id="code" rows="30" cols="160" class="form-control"></textarea>
-
-    <br/>
-
-    <input type="button" onclick="Beautify()" value="Formatting " class="btn btn-default" />
-    <button class="btn btn-default" id="Copybtn" data-clipboard-target="#result">
+        <input type="button" onclick="Beautify()" value="Formatting " class="btn btn-default" />
+		</div>
+		 <div class="col-xs-1">
+        <button class="btn btn-default" id="Copybtn" data-clipboard-target="#result">
+		
     Cut to clipboard
 </button>
+</div>
+ <div class="col-xs-1">
+        <textarea id="result" style=" visibility:hidden;"></textarea>
+</div>
 
-    <textarea id="result" style=" visibility:hidden;"></textarea>
+    </div>
 </body>
 
 </html>
