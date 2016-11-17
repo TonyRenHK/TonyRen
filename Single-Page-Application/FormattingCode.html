@@ -15,7 +15,7 @@
     <script type="text/javascript" src="https://codemirror.net/addon/runmode/runmode.js"></script>
     <script type="text/javascript" src="https://codemirror.net/mode/javascript/javascript.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
+	<script src="https://cdn.rawgit.com/zenorocha/clipboard.js/v1.5.10/dist/clipboard.min.js"></script>
 
     <script type="text/javascript">
         var the = {
@@ -32,6 +32,28 @@
 
             the.editor.focus();
 
+			var clipboard=new Clipboard("#Copybtn", {
+			  text: function(trigger) {
+			  console.log('enter 123');
+			   document.getElementById("result").style.visibility='visible';
+				return null;
+			  }
+			});
+						
+			
+			//var clipboard = new Clipboard('#Copybtn');
+		
+		clipboard.on('success', function(e) {
+		 //
+		console.log('success'); //console.log(e);
+		document.getElementById("result").style.visibility='hidden';
+		});
+		clipboard.on('error', function(e) {
+		console.log(e);
+		});
+		
+		
+			
 
         });
 
@@ -46,8 +68,9 @@
 
 
         function Beautify() {
+			//console.log(the.editor.getValue() );
             //$('#code').val(), ()document.getElementById("code").value,
-            var source = the.editor ? the.editor.getValue() : $('#code').val(),
+            var source = the.editor.getValue(),
                 output,
                 opts = {};
 
@@ -59,32 +82,12 @@
 
             if (the.editor) {
                 the.editor.setValue(output);
+				document.getElementById("result").value=the.editor.getValue();
             } else {
                 $('#source').val(output);
             }
         }
 
-        function CopycClipboard() {
-            console.log('Enter CopycClipboards ');
-             console.log(the.editor.getValue());
-            // Create an auxiliary hidden input
-            var aux = document.createElement("input");
-
-            // Get the text from the element passed into the input
-            aux.setAttribute("value", the.editor.getValue());
-
-            // Append the aux input to the body
-            document.body.appendChild(aux);
-
-            // Highlight the content
-            aux.select();
-
-            // Execute the copy command
-            document.execCommand("copy");
-
-            // Remove the input from the body
-            document.body.removeChild(aux);
-        }
     </script>
 </head>
 
@@ -96,11 +99,11 @@
     <br/>
 
     <input type="button" onclick="Beautify()" value="Formatting " class="btn btn-default" />
-    <button class="btn btn-default" onclick="CopycClipboard();">
+    <button class="btn btn-default" id="Copybtn" data-clipboard-target="#result" >
     Cut to clipboard
 </button>
 
-
+ <textarea id="result" style=" visibility:hidden;"    ></textarea> 
 </body>
 
 </html>
