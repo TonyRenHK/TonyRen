@@ -1,0 +1,88 @@
+import os,shutil
+header_row_count='HEADERROWCOUNT'
+def over_write_file( ip_name,total_lines ):
+    list=[]
+    data_file = open(ip_name,'r')
+    lines = data_file.readline()
+    lines=lines.replace(header_row_count, total_lines)
+    while lines:
+        list.append(lines)
+        lines=data_file.readline()
+    data_file.close()
+    out_data=open(ip_name, 'w')
+    for line in list:
+        out_data.write(line)
+    out_data.close()
+    return
+
+def clean_file(path):
+	shutil.rmtree(path)
+	os.makedirs(path)
+	return
+
+
+##Change variable below if needed
+## variable 'input_file_Header' is the path of your input Header file
+input_file_Header='/home/oracle/Desktop/Input/input2.csv'
+
+## variable 'input_file_path' is the path of your input detail file
+input_file_path='/home/oracle/Desktop/Input/input.csv'
+
+## variable 'out_file_path' is the path of your output folder
+out_file_path='/home/oracle/Desktop/Output/'
+## variable 'FileName' is output file name in the output folder
+file_name='DetailName'
+
+## variable 'CutOffLine' is the Number of line need to split in input file
+cut_off_line=4
+## variable 'CutSize' is the Number of size need to split in input file
+cut_size=1000000000 # (pointer) 1000 pointer =1k eg: 26214400  1000000000
+
+##################Function Start################
+
+
+file_number = 1
+index= 0
+
+try:
+    ##Read Header
+	reader_header = open(input_file_Header,'r')
+	input_line=reader_header.readline()
+	header_names=input_line
+	reader_header.close()
+except IOError:
+    print 'Oops, cannot find the header file!'
+
+
+#Read input Detail file
+try:
+	fi = open(out_file_path+file_name+str(file_number)+'.csv', 'w')
+	spamReader = open(input_file_path,'r')
+	input_line=spamReader.readline()
+	fi.write(header_names)
+except IOError:
+	print 'Oops, cannot write the header file!'
+	clean_file(out_file_path)
+	
+while input_line:
+	try:
+		index=index+1
+		fi.write(input_line)
+		input_line=spamReader.readline()
+	except IOError:
+		print 'Oops, cannot write file!'
+		clean_file(out_file_path)
+    
+    if(index>cut_off_line or fi.tell()>cut_size):
+        fi.close()
+        over_write_file(out_file_path+file_name+str(file_number)+'.csv',str(index))
+
+        ##create new file
+        index=0
+        file_number=file_number+1
+        fi = open(out_file_path+file_name+str(file_number)+'.csv', 'wb')
+        fi.write(header_names)
+# end of while loop
+fi.close()
+if(index>0):
+    over_write_file(out_file_path+file_name+str(file_number)+'.csv',str(index))
