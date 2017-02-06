@@ -1,0 +1,69 @@
+HEADERROWCOUNT='HEADERROWCOUNT'
+
+
+
+##Change variable below if needed
+## variable 'input_file_Header' is the path of your input Header file
+input_file_Header='/home/oracle/Desktop/Input/input2.csv'
+
+## variable 'input_file_path' is the path of your input detail file
+input_file_path='/home/oracle/Desktop/Input/input.csv'
+
+## variable 'out_file_path' is the path of your output folder
+out_file_path='/home/oracle/Desktop/Output/'
+## variable 'FileName' is output file name in the output folder
+FileName='DetailName'
+## variable 'HeadFileName' is output header file name in the output folder
+HeadFileName='HeaderName'
+
+## variable 'CutOffLine' is the Number of line need to split in input file
+cut_off_line=4
+## variable 'CutSize' is the Number of size need to split in input file
+cut_size=1000000000 # (pointer) 1000 pointer =1k
+
+##################Function Start################
+
+
+FileNumber = 1
+Index= 0
+
+##Read Header
+ReaderHeader = open(input_file_Header,'r')
+Inputline=ReaderHeader.readline()
+HeaderNames=Inputline
+ReaderHeader.close()
+
+
+#Read input Detail file
+
+
+fi = open(out_file_path+FileName+str(FileNumber)+'.csv', 'w')
+spamReader = open(input_file_path,'r')
+Inputline=spamReader.readline()
+
+while Inputline:
+    Index=Index+1
+    print >> fi,Inputline[0:len(Inputline)-1]#+Tabdelimiter+str(Index)
+    Inputline=spamReader.readline()
+    
+    if(Index>cut_off_line or fi.tell()>cut_size):
+        fi.close()
+        #write in header
+        fi = open(out_file_path+HeadFileName+str(FileNumber)+'.csv', 'w')
+        templine =HeaderNames.replace(HEADERROWCOUNT, str(Index))
+        print >> fi,templine #templine[0:len(templine)-1]
+        fi.close()
+
+        ##create new file
+        Index=0
+        FileNumber=FileNumber+1
+        fi = open(out_file_path+FileName+str(FileNumber)+'.csv', 'wb')
+
+        
+if(Index>0):
+   fi = open(out_file_path+HeadFileName+str(FileNumber)+'.csv', 'w')
+   templine =HeaderNames.replace(HEADERROWCOUNT, str(Index))
+   print >> fi,templine #t3empline[0:len(templine)-1]
+   fi.close()
+        
+fi.close()
