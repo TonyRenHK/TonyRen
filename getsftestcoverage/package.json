@@ -1,0 +1,20 @@
+{
+  "name": "getTestCoverage",
+  "version": "0.0.1",
+  "scripts": {
+    "coverageEngine": "coverageEngine.js"
+  },
+  "description": "Retrieves the APEX Test coverage from a Salesforce envionment after running the test classes",
+  "readme": "Scripts for providing Salesforce Limits and getting APEX test coverage",
+  "dependencies": {
+    "body-parser": "^1.15.1",
+    "csv-write-stream": "*",
+    "express": "^4.13.4",
+    "fs": "*",
+    "jsforce": "jsforce/jsforce",
+    "lodash": "*",
+    "q": "*",
+    "socket.io": "^1.4.6",
+    "system-sleep": "*"
+  }
+}

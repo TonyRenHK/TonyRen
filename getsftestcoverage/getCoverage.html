@@ -1,0 +1,176 @@
+<html>
+  <style>
+    .row {
+      margin-top: 10px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    #statusRow {
+      display: none;
+    }
+
+    #infoRow {
+      display: none;
+    }
+
+    #errorRow {
+      display: none;
+      color: red;
+      font-weight: bold;
+    }
+
+    #progBar {
+      width: 80%;
+      height: 30px;
+      -webkit-appearance: none;
+    }
+
+    #progBar::-webkit-progress-bar {
+      background-color: #eee;
+      border-radius: 2px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
+    }
+
+    #progBar::-webkit-progress-value {
+      border-radius: 2px;
+      background-image:
+    	   -webkit-linear-gradient(-45deg,
+    	                           transparent 33%, rgba(0, 0, 0, .1) 33%,
+    	                           rgba(0,0, 0, .1) 66%, transparent 66%),
+         -webkit-linear-gradient(top,
+    	                           rgba(255, 255, 255, .25),
+    	                           rgba(0, 0, 0, .25)),
+    	   -webkit-linear-gradient(left, #00C853, #00C853);
+
+      border-radius: 2px;
+      background-size: 35px 30px, 100% 100%, 100% 100%;
+    }
+
+
+  </style>
+  <head>
+    <script src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <h1>Get Salesforce Test Coverage</h1>
+    <form id="sfCredForm" method="post">
+      <div class="row">
+        <div class="col-sm-2 col-sm-offset-4">
+          <label for"sfUrl">Salesforce Deploy Url</label>
+        </div>
+        <div class="col-sm-2">
+        <select name="sfUrl" id="sfUrl" class="form-control">
+          <option value="login.salesforce.com">login.salesforce.com</option>
+          <option value="test.salesforce.com">test.salesforce.com</option>
+        </select>
+          <!--input type="text" id="sfUrl" name="sfUrl" placeholder="login.salesforce.com" class="form-control"></input-->
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2 col-sm-offset-4">
+          <label for"sfUserName">Salesforce User Name</label>
+        </div>
+        <div class="col-sm-2">
+          <input type="text" id="sfUserName" name="sfUserName" class="form-control"></input>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2 col-sm-offset-4">
+          <label for"sfPwd">Salesforce Password</label>
+        </div>
+        <div class="col-sm-2">
+          <input type="Password" id="sfPwd" name="sfPwd" class="form-control"></input>
+        </div>
+      </div>
+      <div class="row" id="statusRow">
+        <div class="col-sm-offset-2">
+          <progress id="progBar" value="0" max="100">
+          </progress>
+        </div>
+      </div>
+      <div class="row" id="infoRow">
+        <div class="col-sm-offset-2">
+          <p id="infoText"></p>
+        </div>
+      </div>
+      <div class="row" id="errorRow">
+        <div class="col-sm-offset-2">
+          <p class="errorText">Uh oh, Something wrong has happened!</p>
+          <p class="errorText">Please ensure your URL, user name and password is correct and retry</p>
+          <p class="errorText">If the issue persists, please file an issue at github</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2 col-sm-offset-4">
+          <button type="button" id="getCoverageBtn" class="btn-primary form-control">Retrieve Test Coverage</button>
+        </div>
+        <div class="col-sm-2">
+          <button type="button" id="openResultBtn" class="btn-primary form-control">Open result page</button>
+        </div>
+      <div>
+    </form>
+  </body>
+<script>
+  $(document).ready(function() {
+    $("#openResultBtn").click(function(){
+      window.open("/result", "_blank");
+    });
+
+    $("#getCoverageBtn").click(function(){
+      $("#errorRow").hide();
+      var socket = io.connect('https://getsftestcoverage-tonyrenhk.c9users.io');
+      var data = {};
+      data.sfUrl = $("#sfUrl").val();
+      data.sfPwd = $("#sfPwd").val();
+      data.sfUserName = $("#sfUserName").val();
+
+      $("#statusRow").show();
+      $("#infoRow").show();
+
+      socket.emit('join', JSON.stringify(data));
+
+      socket.on('messages', function(data) {
+        var moveBar = true;
+        $("#infoText").text(data);
+        if(data.indexOf("Logging in as") > 0) {
+          moveBar = false;
+        } else if(data === "Logged in") {
+          $("#progBar").val(10) ;
+        }
+        else if(data === "Logged out") {
+          $("#progBar").val(100) ;
+          $("#infoText").text("Your test coverage is successfully generated. Please click Open result page button to view the result");
+        }
+        else if(data === "Fetching class information") {
+          $("#progBar").val(28) ;
+        }
+        else if(data === "Fetching trigger information") {
+          $("#progBar").val(46) ;
+        }
+        else if(data === "Fetching code coverage information") {
+          $("#progBar").val(64) ;
+        }
+        else if(data === "Generating result page") {
+          $("#progBar").val(82) ;
+        }
+        else if(data === "Error Occurred") {
+          $("#statusRow").hide();
+          $("#infoRow").hide();
+          $("#progBar").val(0);
+          $("#infoText").text("");
+          $("#errorRow").show();
+        }
+      });
+    });
+  });
+
+</script>
+
+</html>
