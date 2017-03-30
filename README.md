@@ -22,3 +22,20 @@ $ git push -u b1 master
 
 
 
+
+
+
+
+
+
+
+mkdir TR1
+cd TR1
+git init
+echo "# TR1" >> README.md
+git add README.md
+git commit -m "first commit"
+git remote add origin https://git.coding.net/tonyrenhk/TR1.git
+git push -u origin master
+                    
+                    
